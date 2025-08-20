@@ -2,6 +2,8 @@
 
 A full-stack application that allows users to upload PDF documents or enter text, then chat with an AI assistant about the content using Retrieval-Augmented Generation (RAG).
 
+
+[Youtube Link](https://youtu.be/FZc9k9XTARQ)
 ## Features
 
 - **PDF Upload**: Drag and drop or click to upload PDF files
@@ -137,11 +139,3 @@ npm run dev
 ├── package.json             # Backend dependencies
 └── README.md               # This file
 ```
-
-## Notes
-
-- Make sure your OpenAI API key has sufficient credits
-- Qdrant must be running before starting the backend
-- The application uses GPT-4 for chat responses
-- PDF processing may take a few seconds depending on file size
-- Large documents are automatically chunked for better retrieval

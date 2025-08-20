@@ -22,10 +22,5 @@
       "src": "/(.*)",
       "dest": "/frontend/dist/rag-chat-app/index.html"
     }
-  ],
-  "functions": {
-    "server.js": {
-      "maxDuration": 30
-    }
-  }
+  ]
 }

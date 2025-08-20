@@ -19,6 +19,14 @@
       "dest": "/server.js"
     },
     {
+      "src": "/",
+      "dest": "/frontend/dist/rag-chat-app/index.html"
+    },
+    {
+      "src": "/(.*\\..+)",
+      "dest": "/frontend/dist/rag-chat-app/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/frontend/dist/rag-chat-app/index.html"
     }

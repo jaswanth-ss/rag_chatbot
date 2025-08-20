@@ -23,7 +23,7 @@ export class AppComponent implements AfterViewChecked {
   isLoadingResponse = false;
   documentStatus: any = null;
   hasContent = false;
-  apiUrl = '/api';
+  apiUrl = 'https://ragchat-production.up.railway.app/api';
   shouldScrollToBottom = false;
 
   constructor(private http: HttpClient) {}

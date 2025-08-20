@@ -13,12 +13,42 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
-const port = 3000;
-const client = new OpenAI();
+const port = process.env.PORT || 3000;
 
-app.use(cors());
+// Initialize OpenAI client with error handling
+let client;
+try {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY environment variable is required');
+  }
+  client = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+  });
+} catch (error) {
+  console.error('Failed to initialize OpenAI client:', error.message);
+  process.exit(1);
+}
+
+app.use(cors({
+  origin: [
+    'http://localhost:4200',
+    'https://localhost:4200',
+    'https://your-frontend-domain.vercel.app',
+    'https://*.vercel.app'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Basic health check (no dependencies required)
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    message: 'RAG Chat API is running',
+    timestamp: new Date().toISOString()
+  });
+});
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -47,9 +77,16 @@ const upload = multer({
 let currentDocumentStore = null;
 let currentTextContent = '';
 
-const embeddings = new OpenAIEmbeddings({
-  model: 'text-embedding-3-large',
-});
+// Initialize embeddings
+let embeddings;
+try {
+  embeddings = new OpenAIEmbeddings({
+    model: 'text-embedding-3-large',
+  });
+} catch (error) {
+  console.error('Failed to initialize embeddings:', error.message);
+  embeddings = null;
+}
 
 app.post('/api/upload-pdf', upload.single('pdf'), async (req, res) => {
   try {

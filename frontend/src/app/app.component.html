@@ -1,0 +1,111 @@
+<div class="app-container">
+  <div class="app-header">
+    <h1>RAG Chat Application</h1>
+    <p>Upload a PDF or enter text, then chat with AI about the content</p>
+  </div>
+
+  <div class="main-content">
+  
+    <div class="left-panel">
+      <div class="panel-header">
+        <h2>Document Input</h2>
+      </div>
+      
+      <div class="upload-section">
+        <h3>Upload PDF</h3>
+        <div class="file-upload-area" 
+             [class.dragover]="isDragOver"
+             (dragover)="onDragOver($event)"
+             (dragleave)="onDragLeave($event)"
+             (drop)="onDrop($event)"
+             (click)="fileInput.click()">
+          <div class="upload-icon">📄</div>
+          <p>Drag & drop PDF file here or click to browse</p>
+          <input #fileInput type="file" accept=".pdf" (change)="onFileSelected($event)" hidden>
+        </div>
+        
+        <div *ngIf="uploadedFile" class="file-info">
+          <div class="file-details">
+            <span class="file-name">{{ uploadedFile.name }}</span>
+            <span class="file-size">({{ formatFileSize(uploadedFile.size) }})</span>
+          </div>
+          <button class="btn-upload" (click)="uploadFile()" [disabled]="isUploading">
+            {{ isUploading ? 'Processing...' : 'Process PDF' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="text-section">
+        <h3>Or Enter Text</h3>
+        <textarea 
+          [(ngModel)]="textContent"
+          placeholder="Enter your text content here..."
+          class="text-input"
+          rows="8">
+        </textarea>
+        <button class="btn-process" (click)="processText()" [disabled]="!textContent.trim() || isProcessingText">
+          {{ isProcessingText ? 'Processing...' : 'Process Text' }}
+        </button>
+      </div>
+
+      <div class="status-section" *ngIf="documentStatus">
+        <div class="status-indicator" [class]="documentStatus.type">
+          <span class="status-icon">{{ documentStatus.type === 'success' ? '✅' : '❌' }}</span>
+          <span>{{ documentStatus.message }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div class="panel-header">
+        <h2>Chat</h2>
+      </div>
+
+      <div class="chat-container">
+        <div class="chat-messages" #chatMessages>
+          <div *ngFor="let message of chatHistory" 
+               class="message" 
+               [class.user-message]="message.type === 'user'"
+               [class.ai-message]="message.type === 'ai'">
+            <div class="message-content">
+              <div class="message-text">{{ message.content }}</div>
+              <div class="message-time">{{ formatTime(message.timestamp) }}</div>
+            </div>
+          </div>
+          
+          <div *ngIf="isLoadingResponse" class="message ai-message loading">
+            <div class="message-content">
+              <div class="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-container">
+          <div class="chat-input-wrapper">
+            <textarea 
+              [(ngModel)]="currentMessage"
+              (keydown.enter)="onEnterPressed($any($event))"
+              placeholder="Ask a question about your document..."
+              class="chat-input"
+              rows="2"
+              [disabled]="!hasContent || isLoadingResponse">
+            </textarea>
+            <button 
+              class="btn-send" 
+              (click)="sendMessage()" 
+              [disabled]="!currentMessage.trim() || !hasContent || isLoadingResponse">
+              <span class="send-icon">➤</span>
+            </button>
+          </div>
+          <div class="input-help" *ngIf="!hasContent">
+            Please upload a PDF or enter text before chatting
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

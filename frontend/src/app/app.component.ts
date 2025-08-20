@@ -23,7 +23,7 @@ export class AppComponent implements AfterViewChecked {
   isLoadingResponse = false;
   documentStatus: any = null;
   hasContent = false;
-  apiUrl = 'http://localhost:3000/api';
+  apiUrl = '/api';
   shouldScrollToBottom = false;
 
   constructor(private http: HttpClient) {}

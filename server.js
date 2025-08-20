@@ -62,8 +62,9 @@ app.post('/api/upload-pdf', upload.single('pdf'), async (req, res) => {
     const docs = await loader.load();
     
     currentDocumentStore = await QdrantVectorStore.fromDocuments(docs, embeddings, {
-      url: 'http://localhost:6333',
-      collectionName: `pdf-${Date.now()}`,
+      url: process.env.QDRANT_URL || 'http://localhost:6333',
+      apiKey: process.env.QDRANT_API_KEY,
+      collectionName: process.env.QDRANT_COLLECTION_NAME || 'rag-chat',
     });
 
     fs.unlinkSync(pdfPath);

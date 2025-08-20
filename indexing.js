@@ -14,9 +14,11 @@ async function init() {
   });
 
   const vectorStore = await QdrantVectorStore.fromDocuments(docs, embeddings, {
-    url: 'http://localhost:6333',
-    collectionName: 'chaicode-collection',
+    url: process.env.QDRANT_URL || 'http://localhost:6333',
+    apiKey: process.env.QDRANT_API_KEY,
+    collectionName: process.env.QDRANT_COLLECTION_NAME || 'rag-chat-collection',
   });
+  
 
   console.log('Indexing of documents done...');
 }

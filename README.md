@@ -1,3 +1,4 @@
+
 # RAG Chat Application
 
 A full-stack application that allows users to upload PDF documents or enter text, then chat with an AI assistant about the content using Retrieval-Augmented Generation (RAG).

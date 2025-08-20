@@ -1,8 +1,8 @@
 {
   "name": "20_08",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "RAG Chat Application with Angular frontend and Node.js backend",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",

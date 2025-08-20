@@ -15,8 +15,9 @@ async function chat() {
   const vectorStore = await QdrantVectorStore.fromExistingCollection(
     embeddings,
     {
-      url: 'http://localhost:6333',
-      collectionName: 'chaicode-collection',
+      url: process.env.QDRANT_URL || 'http://localhost:6333',
+      apiKey: process.env.QDRANT_API_KEY,
+      collectionName: process.env.QDRANT_COLLECTION_NAME || 'rag-chat-collection',
     }
   );
 
@@ -37,7 +38,7 @@ async function chat() {
   `;
 
   const response = await client.chat.completions.create({
-    model: 'gpt-4.1',
+    model: 'gpt-4',
     messages: [
       { role: 'system', content: SYSTEM_PROMPT },
       { role: 'user', content: userQuery },
